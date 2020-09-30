@@ -5,11 +5,16 @@
 class DataLoader{
     constructor(url, method = (res) => res.json()) {
         this._url = url;
+        this._fetch = fetch(url);
         this._method = method;
     }
 
     get url() {
         return this._url;
+    }
+
+    get fetch() {
+        return this._fetch;
     }
 
     get method() {
@@ -20,18 +25,15 @@ class DataLoader{
         return this._method = method;
     }
 
-    fetch() {
-        this.response = fetch(this.url);
-        return this;
-    }
-
-    then() {
-        return this.response.then(this.method);
+    getData() {
+        return this.fetch.then(this.method);
     }
 }
 
-(async function () {
+getDataWithDataLoader();
+
+async function getDataWithDataLoader() {
     const dataLoader = new DataLoader('../../users.json');
-    console.log(dataLoader);
-    const result = await dataLoader.fetch().then();
-})()
+    const result = await dataLoader.getData();
+    console.log(result);
+}
